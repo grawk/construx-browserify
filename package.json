@@ -1,6 +1,6 @@
 {
   "name": "construx-star",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "star compiler plugin for construx",
   "main": "index.js",
   "scripts": {
