@@ -1,11 +1,11 @@
-# construx-star
+# construx-browserify
 
-Lead Maintainer: [star](star)
+Lead Maintainer: [Matt Edelman](https://github.com/grawk)
 
-[![Build Status](https://travis-ci.org/krakenjs/construx-star.svg?branch=master)](https://travis-ci.org/krakenjs/construx-star)
-[![NPM version](https://badge.fury.io/js/construx-star.png)](http://badge.fury.io/js/construx-star)
+[![Build Status](https://travis-ci.org/krakenjs/construx-browserify.svg?branch=master)](https://travis-ci.org/krakenjs/construx-browserify)
+[![NPM version](https://badge.fury.io/js/construx-browserify.png)](http://badge.fury.io/js/construx-browserify)
 
-[construx](https://github.com/krakenjs/construx) plugin for JIT-compiling star resources during development of [express](http://expressjs.com/) applications.
+[construx](https://github.com/krakenjs/construx) plugin for JIT-compiling browserify resources during development of [express](http://expressjs.com/) applications.
 
 ## REMOVE THIS SECTION
 
@@ -31,7 +31,7 @@ This plugin requires your project to have `<whatever module>@<whatever semver>`.
 ### Install
 
 ```shell
-$ npm install --save-dev construx-star
+$ npm install --save-dev construx-browserify
 ```
 
 ### Configure
@@ -40,9 +40,17 @@ Where you configure your construx plugins:
 
 ```json
 {
-    "star": {
-        "module": "construx-star",
-        "files": "/star/**/*.compiled",
+    "browserify": {
+        "module": "construx-browserify",
+        "files": "**/*.js",
+        "bundles": {
+            "/bundle.js": {
+                "src": "path:./public/main.js",
+                "options": {
+                    "transform": ["reactify", "require-globify"]
+                }
+            }
+        }
     }
 }
 ```

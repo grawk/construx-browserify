@@ -17,30 +17,27 @@
  \*───────────────────────────────────────────────────────────────────────────*/
 'use strict';
 
+var browserify = require('browserify');
 
 module.exports = function (options) {
+    options.precompile = function (options, cb) {
+            options.skipRead = true;
+            cb(null, options);
+        };
+    return function (data, args, callback) {
 
-    options.ext = options.ext || 'star';
-    options.dumpLineNumbers = 'comments';
-
-    /**
-     * Middleware that will process the request.
-     * See https://github.com/krakenjs/construx#middleware-process-a-matched-request
-     * @param raw: Raw content of the resource matched by Construx.
-     * @param config: Configuration object provided through Construx initialization (Usually found in Kraken's config files)
-     * @returns function (err, result): A callback that will take the compiled file.
-     */
-    return function compiler(raw, config, callback) {
-        var star = raw.toString('utf8');
-        var paths = config.paths;
-        var name = config.context.name;
-
-        if (star === 'good') {
-            callback(null, 'star');
-        } else {
-            callback(new Error('Bad star file'));
+        //is this requested file in our map?
+        if (!options.bundles.hasOwnProperty(args.context.filePath)) {
+            return callback(new Error('construx-browserify doesn\'t know how to process ' + args.context.filePath));
         }
+        var opts = options.bundles[args.context.filePath];
 
-    };
-
+        browserify(opts.src, opts.options || {})
+          .bundle(function (err, buf) {
+              if (err) {
+                  return callback(err);
+              }
+              callback(null, buf.toString());
+          });
+    }
 };
